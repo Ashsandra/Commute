@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Text to Speech Demo</string>
+    <string-array name="countries_array">
+        <item>Chinese</item>
+        <item>English</item>
+        <item>French</item>
+        <item>German</item>
+        <item>Italian</item>
+        <item>Japanese</item>
+        <item>Korean</item>
+    </string-array>
+</resources>

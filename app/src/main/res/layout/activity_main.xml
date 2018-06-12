@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding = "16dp"
+    tools:context=".MainActivity">
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text = "Choose a language:"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+    <Spinner
+        android:id = "@+id/spinner1"
+        android:layout_marginLeft="16dp"
+        android:paddingTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown"
+        android:background="@android:drawable/btn_dropdown"></Spinner>
+</LinearLayout>
+
+<EditText
+    android:padding="16dp"
+    android:id = "@+id/edit_text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint = "Enter Anything!"
+    android:enabled="false"/>
+<TextView
+    android:padding="16dp"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:text = "Pitch"
+    android:textSize="16sp"
+    android:textStyle="italic"/>
+<SeekBar
+    android:layout_width="200dp"
+    android:layout_height="wrap_content"
+    android:progress="50"
+    android:id = "@+id/seekbarpitch"/>
+<TextView
+    android:padding="16dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text = "Speed"
+    android:textSize="16sp"
+    android:textStyle="italic"/>
+<SeekBar
+    android:layout_width="200dp"
+    android:layout_height="wrap_content"
+    android:progress="50"
+    android:id="@+id/seekbarspeed"/>
+<Button
+    android:padding = "16dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id = "@+id/Convert"
+    android:text = "Convert"
+    android:layout_gravity="center_horizontal"/>
+<Button
+    android:padding = "16dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id = "@+id/large_text"
+    android:text = "Click here to add a textbook"
+    android:layout_gravity="center_horizontal"/>
+</LinearLayout>
+
+
