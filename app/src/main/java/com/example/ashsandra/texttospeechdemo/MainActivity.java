@@ -1,9 +1,17 @@
 package com.example.ashsandra.texttospeechdemo;
 
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.database.Cursor;
+import android.net.Uri;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,6 +21,7 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,6 +31,10 @@ public class MainActivity extends AppCompatActivity {
     private SeekBar mSeekBarSpeed;
     private Button mButtonSpeak;
     private Spinner mSpinner;
+    private Button mButtondownload;
+    private DownloadManager downloadManager;
+    private long reference;
+    Toast toast;
 
 
     @Override
@@ -31,8 +44,10 @@ public class MainActivity extends AppCompatActivity {
         mButtonSpeak = findViewById(R.id.Convert);
         mSpinner = findViewById(R.id.spinner1);
         mEditText = findViewById(R.id.edit_text);
+        mButtondownload = findViewById(R.id.large_text);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.countries_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        toast = new Toast(this);
         mSpinner.setAdapter(adapter);
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -63,6 +78,66 @@ public class MainActivity extends AppCompatActivity {
                 else {
                     Log.e("language choice error","language not supported");
                 }
+
+            mButtondownload.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        startdownload();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
+                BroadcastReceiver receiver = new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        String action = intent.getAction();
+                        if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+                            DownloadManager.Query req_query = new DownloadManager.Query();
+                            req_query.setFilterById(reference);
+                            Cursor c = downloadManager.query(req_query);
+                            if (c.moveToFirst()){
+                                int column_index = c.getColumnIndex(DownloadManager.COLUMN_STATUS);
+                                if (DownloadManager.STATUS_SUCCESSFUL == c.getInt(column_index)){
+                                    try {
+                                        downloadManager.openDownloadedFile(reference);
+                                    } catch (FileNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
+                                    toast.setGravity(Gravity.CENTER,0,0);
+                                    toast.makeText(getApplicationContext(),"Download is Completed", Toast.LENGTH_LONG).show();
+
+
+
+
+                                }
+
+                            }
+
+
+
+
+                        }
+                    }
+
+                };
+                registerReceiver(receiver,new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
+            }
+
+            private void startdownload() throws FileNotFoundException {
+                downloadManager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
+                Uri uri = Uri.parse("https://d3bxy9euw4e147.cloudfront.net/oscms-prodcms/media/documents/Prealgebra-OP.pdf");
+                DownloadManager.Request request = new DownloadManager.Request(uri);
+                request.setTitle("Textbook Download");
+                request.setDescription("Textbook Downloading...");
+                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                reference = downloadManager.enqueue(request);
+
+
 
 
             }
